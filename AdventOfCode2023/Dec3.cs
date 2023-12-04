@@ -31,12 +31,12 @@ namespace AdventOfCode2023
 
                 if (Regex.IsMatch(match.Value, @"\.[0-9]+\."))
                 {
-                    Trace.WriteLine("No Match "+match.Value);
+                    Trace.WriteLine("No Match " + match.Value);
                     continue;
                 }
                 else
                 {
-                    Trace.WriteLine("Match: "+match.Value);
+                    Trace.WriteLine("Match: " + match.Value);
                     var number = Regex.Match(match.Value, "[0-9]+");
                     total += int.Parse(number.Value);
                 }
@@ -44,6 +44,25 @@ namespace AdventOfCode2023
             }
 
             Trace.WriteLine("Total: " + total);
+        }
+
+        [TestMethod]
+        public void RegextTest1()
+        {
+            var pattern1 = @"([0-9]+)(?!\.)";
+            var pattern2 = @"(?<!\.)([0-9]+)";
+            var pattern3 = @"(?<!\.)([0-9]+)([0-9]+)(?!\.)";
+
+            var matches1 = Regex.Matches(content, pattern1);
+            var matches2 = Regex.Matches(content, pattern2);
+            var matches3 = Regex.Matches(content, pattern3);
+
+            var matches = Regex.Matches(content, ".[0-9]+.");
+
+            for (int i = 0; i < 30; i++)
+            {
+                Trace.WriteLine("Org: " + matches[i].Value + " Pat1: " + matches1[i].Value + " Pat2: " + matches2[i].Value + " Pat3: " + matches3[i].Value);
+            }
         }
 
     }
