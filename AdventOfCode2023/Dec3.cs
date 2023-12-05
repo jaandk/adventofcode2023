@@ -128,7 +128,50 @@ namespace AdventOfCode2023
         [TestMethod]
         public void Part2()
         {
+            var rows = content.Split("\r\n");
 
+            List<int> numbers = new List<int>();
+
+            var tmpNum = string.Empty;
+            var validNum = false;
+            var dummyArray = "............................................................................................................................................";
+
+            for (int r = 0; r < rows.Length; r++)
+            {
+                var preRow = r > 0 ? rows[r - 1].ToArray() : dummyArray.ToArray();
+                var nextRow = r != rows.Length - 1 ? rows[r + 1].ToArray() : dummyArray.ToArray();
+                var contentArray = rows[r].ToArray();
+
+                for (int i = 0; i < contentArray.Length; i++)
+                {
+                    if (contentArray[i] == '*')
+                    {
+                        var range = new Range(i - 1, i + 2);
+                        var top = preRow.Take(range);
+                        var current = contentArray.Take(range);
+                        var button = nextRow.Take(range);
+
+                        //Trace.WriteLine(new string(top.ToArray()));
+                        //Trace.WriteLine(new string(current.ToArray()));
+                        //Trace.WriteLine(new string(button.ToArray()));
+                        //Trace.WriteLine("");
+
+                        if (top.Count(s => s == '.') != 3)
+                        {
+                            Trace.WriteLine(new string(top.ToArray()));
+                        }
+                        if (current.Count(s => s == '.') != 2)
+                            Trace.WriteLine(new string(current.ToArray()));
+
+                        if (button.Count(s => s == '.') != 3)
+                        {
+                            Trace.WriteLine(new string(button.ToArray()));
+                        }
+
+                        Trace.WriteLine("");
+                    }
+                }
+            }
         }
     }
 }
