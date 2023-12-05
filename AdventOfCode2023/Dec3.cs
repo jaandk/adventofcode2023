@@ -21,49 +21,114 @@ namespace AdventOfCode2023
         }
 
         [TestMethod]
-        public void Part1() // Work in progress
+        public void Part1()
         {
-            int total = 0;
-            var matches = Regex.Matches(content, ".[0-9]+.");
+            var rows = content.Split("\r\n");
 
-            foreach (Match match in matches)
+            List<int> numbers = new List<int>();
+
+            var tmpNum = string.Empty;
+            var validNum = false;
+            var dummyArray = "............................................................................................................................................";
+
+            for (int r = 0; r < rows.Length; r++)
             {
+                var preRow = r > 0 ? rows[r - 1].ToArray() : dummyArray.ToArray();
+                var nextRow = r != rows.Length - 1 ? rows[r + 1].ToArray() : dummyArray.ToArray();
+                var contentArray = rows[r].ToArray();
 
-                if (Regex.IsMatch(match.Value, @"\.[0-9]+\."))
+                for (int i = 0; i < contentArray.Length; i++)
                 {
-                    Trace.WriteLine("No Match " + match.Value);
-                    continue;
-                }
-                else
-                {
-                    Trace.WriteLine("Match: " + match.Value);
-                    var number = Regex.Match(match.Value, "[0-9]+");
-                    total += int.Parse(number.Value);
-                }
+                    if (char.IsDigit(contentArray[i]))
+                    {
+                        if (char.IsDigit(contentArray[i]))
+                        {
+                            tmpNum += contentArray[i];
+                        }
 
+                        if (i > 0 && isSpecial(contentArray[i - 1]))
+                        {
+                            validNum = true;
+                        }
+
+                        if (i != contentArray.Length - 1 && isSpecial(contentArray[i + 1]))
+                        {
+                            validNum = true;
+                        }
+
+                        if (i > 0 && isSpecial(preRow[i - 1]))
+                        {
+                            validNum = true;
+                        }
+
+                        if (isSpecial(preRow[i]))
+                        {
+                            validNum = true;
+                        }
+
+                        if (i != contentArray.Length - 1 && isSpecial(preRow[i + 1]))
+                        {
+                            validNum = true;
+                        }
+
+                        if (i > 0 && isSpecial(nextRow[i - 1]))
+                        {
+                            validNum = true;
+                        }
+
+                        if (isSpecial(nextRow[i]))
+                        {
+                            validNum = true;
+                        }
+
+                        if (i != contentArray.Length - 1 && isSpecial(nextRow[i + 1]))
+                        {
+                            validNum = true;
+                        }
+
+                    }
+                    else if (!char.IsDigit(contentArray[i]) && !string.IsNullOrEmpty(tmpNum) && validNum)
+                    {
+                        numbers.Add(int.Parse(tmpNum));
+
+                        tmpNum = string.Empty;
+                        validNum = false;
+                    }
+                    else
+                    {
+                        tmpNum = string.Empty;
+                    }
+
+                    if (validNum && i == contentArray.Length - 1)
+                    {
+                        numbers.Add(int.Parse(tmpNum));
+
+                        tmpNum = string.Empty;
+                        validNum = false;
+                    }
+                }
             }
+
+            foreach (var number in numbers)
+                Trace.WriteLine(number.ToString());
+
+            int total = 0;
+
+            foreach (var number in numbers)
+                total += number;
 
             Trace.WriteLine("Total: " + total);
         }
 
-        [TestMethod]
-        public void RegextTest1()
+        bool isSpecial(char c)
         {
-            var pattern1 = @"([0-9]+)(?!\.)";
-            var pattern2 = @"(?<!\.)([0-9]+)";
-            var pattern3 = @"(?<!\.)([0-9]+)([0-9]+)(?!\.)";
-
-            var matches1 = Regex.Matches(content, pattern1);
-            var matches2 = Regex.Matches(content, pattern2);
-            var matches3 = Regex.Matches(content, pattern3);
-
-            var matches = Regex.Matches(content, ".[0-9]+.");
-
-            for (int i = 0; i < 30; i++)
-            {
-                Trace.WriteLine("Org: " + matches[i].Value + " Pat1: " + matches1[i].Value + " Pat2: " + matches2[i].Value + " Pat3: " + matches3[i].Value);
-            }
+            return !char.IsDigit(c) && c != '.';
         }
 
+        [TestMethod]
+        public void Part2()
+        {
+
+        }
     }
 }
