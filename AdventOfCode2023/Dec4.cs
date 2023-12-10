@@ -1,10 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 
 namespace AdventOfCode2023
 {
@@ -34,13 +28,7 @@ namespace AdventOfCode2023
 
                 if (winners.Any())
                 {
-                    //for (int j = 1; j < winners.Count() + 1; j++)
-                    //{
-                    //    total += Math.Pow(2, j);
-
-                    //}
                     total += Math.Pow(2, winners.Count()) * 0.5;
-
                 }
             }
 
